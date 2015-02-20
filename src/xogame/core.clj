@@ -1,6 +1,6 @@
 (ns xogame.core
   (:use [seesaw.core :as s]
-        [xogame.model :only [game-field tiles]]
+        [xogame.model :only [game-field field-size]]
         [xogame.controller :only [make-move]]))
 
 (def main-frame (s/frame :title "XO", :on-close :hide, :content (my-content)))
@@ -22,4 +22,4 @@
         (range count))))
 
 (defn my-content []
-  (s/horizontal-panel :items (add-buttons 15)))
+  (s/horizontal-panel :items (add-buttons field-size)))
