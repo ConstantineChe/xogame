@@ -19,6 +19,9 @@
 
 
 
+(defn refresh-content []
+  (config! main-frame :content (my-content)))
+
 (defn add-buttons [count]
   (vec (map
         (fn [x] (s/vertical-panel
