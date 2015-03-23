@@ -63,5 +63,5 @@
   (if (some #(> % 4) (map
              (fn [direction]
                (check-direction current direction 1 false))
-             (map vec (comb/cartesian-product [1 0] [0 1]))))
+             (filter #(not (= [0 0] %)) (map vec (comb/cartesian-product [1 0] [0 1])))))
     (s/alert "done")))
