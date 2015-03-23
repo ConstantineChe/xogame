@@ -1,7 +1,8 @@
 (ns xogame.core
   (:use [seesaw.core :as s]
         [xogame.model :only [game-field field-size tiles]])
-  (:require [clojure.math.combinatorics :as comb]))
+  (:require [clojure.math.combinatorics :as comb])
+  (:gen-class))
 
 (declare main-frame
          add-buttons
@@ -12,7 +13,6 @@
   (-> main-frame pack! show!))
 
 (defn -main []
-  (in-ns 'xogame.core)
   (main))
 
 
@@ -54,7 +54,7 @@
   (let [next (map (fn [x y] (+ x y)) current direction)]
       (if (= (get-in @game-field current)
              (get-in @game-field next))
-        (recur next direction (inc counter) false)
+        (recur next direction (inc counter) reverse?)
         (if (not reverse?) (recur current (map #(* % -1) direction) 1 true)
             counter))))
 
@@ -63,5 +63,6 @@
   (if (some #(> % 4) (map
              (fn [direction]
                (check-direction current direction 1 false))
-             (filter #(not (= [0 0] %)) (map vec (comb/cartesian-product [1 0] [0 1])))))
+             (map #(if (= [0 0] %) [1 -1] %)
+                  (map vec (comb/cartesian-product [1 0] [0 1])))))
     (s/alert "done")))
