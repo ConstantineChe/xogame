@@ -32,6 +32,5 @@
   (if (some #(> % 4) (map
              (fn [direction]
                (check-direction current direction 1 false))
-             (map #(if (= [0 0] %) [1 -1] %)
-                  (map vec (comb/cartesian-product [1 0] [0 1])))))
+             [[0 1] [1 0] [1 1] [-1 1]]))
     (s/alert "done")))
