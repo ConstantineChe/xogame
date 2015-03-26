@@ -1,4 +1,7 @@
-(ns xogame.model)
+(ns xogame.model
+  (:require [clojure.math.combinatorics :as comb]
+            [seesaw.core :as s])
+)
 
 (def field-size 15)
 
@@ -25,7 +28,20 @@
                   (get-in field-state [x (inc y)])))
         (swap! n inc) (swap! n * 0)))))
 
-(filter #(> % 0) (line? @game-field))
+(defn check-direction [current direction counter reverse?]
+  "check for line in direction"
+  (let [next (map (fn [x y] (+ x y)) current direction)]
+      (if (= (get-in @game-field current)
+             (get-in @game-field next))
+        (recur next direction (inc counter) reverse?)
+        (if (not reverse?) (recur current (map #(* % -1) direction) 1 true)
+            counter))))
 
-(for [x (range field-size) y (range field-size)]
-  (if (< y 14) (print [x y]) (println  [x y])))
+(defn is-finished? [current]
+  "check if line is done."
+  (if (some #(> % 4) (map
+             (fn [direction]
+               (check-direction current direction 1 false))
+             (map #(if (= [0 0] %) [1 -1] %)
+                  (map vec (comb/cartesian-product [1 0] [0 1])))))
+    (s/alert "done")))
