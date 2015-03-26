@@ -8,23 +8,13 @@
 (declare main-frame
          add-buttons
          make-move
+         my-content
          )
-
-(defn main []
-  (-> main-frame pack! show!))
-
-(defn -main []
-  (main))
-
-
-
-(defn my-content []
-  (s/horizontal-panel :items (add-buttons field-size)))
-
 
 (def turn (atom :cross))
 
-
+(defn my-content []
+  (s/horizontal-panel :items (add-buttons field-size)))
 
 (defn refresh-content []
   (config! main-frame :content (my-content)))
@@ -48,5 +38,11 @@
            (swap! turn (fn [a] :cross)))
        (config! main-frame :content (my-content))
        (is-finished? [x y]))))
+
+(defn main []
+  (-> main-frame pack! show!))
+
+(defn -main []
+  (main))
 
 (def main-frame (s/frame :title "XO", :on-close :hide, :content (my-content)))
