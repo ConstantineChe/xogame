@@ -50,12 +50,17 @@
 (defn -main []
   (main))
 
+(def actions {:new [:action (fn [e] (clear game-field) (refresh-content) (reset! turn :cross))]
+              :exit [:action (fn [e] (System/exit 0))]})
+
 (def main-frame (s/frame :title "XO"
                          :menubar (s/menubar :items
                                              [(s/menu :text "Game" :items
                                                       [(s/menu-item
                                                         :text "New"
-                                                        :listen [:action (fn [e] (clear game-field)
-                                                                           (refresh-content))])])
+                                                        :listen (actions :new))
+                                                       (s/menu-item
+                                                        :text "Exit"
+                                                        :listen (actions :exit))])
                                               (s/menu :text "About")])
-                         :on-close :hide :content (my-content)))
+                         :on-close :exit :content (my-content)))
