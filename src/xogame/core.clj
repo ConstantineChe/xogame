@@ -9,6 +9,8 @@
          add-buttons
          make-move
          my-content
+         new-action
+         exit-action
          )
 
 (def turn (atom :cross))
@@ -37,7 +39,10 @@
        (if (= @turn :cross) (swap! turn (fn [a] :zero))
            (swap! turn (fn [a] :cross)))
        (config! main-frame :content (my-content))
-       (is-finished? [x y]))))
+       (if (is-finished? [x y])
+         (do (s/alert "done")
+             (clear game-field)
+             (refresh-content))))))
 
 (defn main []
   (-> main-frame pack! show!))
@@ -45,4 +50,12 @@
 (defn -main []
   (main))
 
-(def main-frame (s/frame :title "XO", :on-close :hide, :content (my-content)))
+(def main-frame (s/frame :title "XO"
+                         :menubar (s/menubar :items
+                                             [(s/menu :text "Game" :items
+                                                      [(s/menu-item
+                                                        :text "New"
+                                                        :listen [:action (fn [e] (clear game-field)
+                                                                           (refresh-content))])])
+                                              (s/menu :text "About")])
+                         :on-close :hide :content (my-content)))

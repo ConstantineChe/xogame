@@ -33,4 +33,4 @@
              (fn [direction]
                (check-direction current direction 1 false))
              [[0 1] [1 0] [1 1] [-1 1]]))
-    (s/alert "done")))
+    true))
