@@ -9,8 +9,7 @@
          add-buttons
          make-move
          my-content
-         new-action
-         exit-action
+         gameover
          )
 
 (def turn (atom :cross))
@@ -40,9 +39,18 @@
            (swap! turn (fn [a] :cross)))
        (config! main-frame :content (my-content))
        (if (is-finished? [x y])
-         (do (s/alert "done")
-             (clear game-field)
-             (refresh-content))))))
+         (gameover)))))
+
+(defn gameover []
+  (->  (s/dialog
+        :type :question
+        :option-type :yes-no
+        :content "Game over. Start new game?"
+        :success-fn (fn [p] ((clear game-field)
+                            (refresh-content)
+                            (reset! turn :cross)
+                            (s/dispose! p))))
+       pack! show!))
 
 (defn main []
   (-> main-frame pack! show!))
