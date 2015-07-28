@@ -45,11 +45,11 @@
   (->  (s/dialog
         :type :question
         :option-type :yes-no
-        :content "Game over. Start new game?"
+        :content "Gave over. Start new?"
         :success-fn (fn [p] ((clear game-field)
                             (refresh-content)
                             (reset! turn :cross)
-                            (s/dispose! p))))
+                            (.dispose (s/to-root p)))))
        pack! show!))
 
 (defn main []
